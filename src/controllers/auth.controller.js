@@ -20,15 +20,16 @@ export const register = async (req, res) => {
       username: userSaved.username,
       email: userSaved.email,
     });
-  } catch (error) {}
-  res.send("Register");
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const userFound = await userSaved.findOne({ email });
+    const userFound = await User.findOne({ email });
     if (!userFound) return res.status(400).json({ message: "User not Found" });
     const isMatch = await bcrypt.compare(password, userFound.password);
     if (!isMatch)
@@ -41,8 +42,9 @@ export const login = async (req, res) => {
       username: userFound.username,
       email: userFound.email,
     });
-  } catch (error) {}
-  res.send("Register");
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const logout = (req, res) => {
@@ -52,6 +54,14 @@ export const logout = (req, res) => {
   return res.sendStatus(200);
 };
 
-export const profile = (req, res) => {
-  res.send("profile ");
+export const profile = async (req, res) => {
+  const userFound = await User.findById(req.user.id);
+
+  if (!userFound) return res.status(400).json({ message: "User not found" });
+
+  return res.json({
+    id: userFound._id,
+    username: userFound.username,
+    email: userFound.email,
+  });
 };
