@@ -4,8 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 function LoginPage (){
-  const {register,isAuthenticated, handleSubmit, formState:{errors}}= useForm();
-  const {signin, errors: signinErrors}= useAuth()
+  const {register, handleSubmit, formState:{errors}}= useForm();
+  const {signin, errors: signinErrors, isAuthenticated}= useAuth()
   const navigate = useNavigate()
 
   useEffect(()=>{
